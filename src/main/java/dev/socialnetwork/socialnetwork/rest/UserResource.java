@@ -3,6 +3,7 @@ package dev.socialnetwork.socialnetwork.rest;
 import dev.socialnetwork.socialnetwork.domain.model.User;
 import dev.socialnetwork.socialnetwork.domain.repository.UserRepository;
 import dev.socialnetwork.socialnetwork.rest.dto.CreateUserRequest;
+import dev.socialnetwork.socialnetwork.rest.dto.ResponseError;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.inject.Inject;
@@ -41,9 +42,8 @@ public class UserResource {
     public Response createUser(CreateUserRequest userRequest){
         Set<ConstraintViolation<CreateUserRequest>> validate = validator.validate(userRequest);
         if(!validate.isEmpty()){
-            ConstraintViolation<CreateUserRequest> erro = validate.stream().findAny().get();
-            String erroMessage = erro.getMessage();
-            return Response.status(400).entity(erroMessage).build();
+            ResponseError responseError = ResponseError.createFromValidation(validate);
+            return Response.status(400).entity(responseError).build();
         }
 
         User user = new User();
