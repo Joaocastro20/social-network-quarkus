@@ -7,21 +7,27 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Set;
 
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-    @Inject
-    private UserRepository repository;
 
-    public UserResource(UserRepository repository){
+    private UserRepository repository;
+    private Validator validator;
+
+    @Inject
+    public UserResource(UserRepository repository, Validator validator){
 
         this.repository = repository;
+        this.validator = validator;
     }
 
     @GET
@@ -33,6 +39,13 @@ public class UserResource {
     @POST
     @Transactional
     public Response createUser(CreateUserRequest userRequest){
+        Set<ConstraintViolation<CreateUserRequest>> validate = validator.validate(userRequest);
+        if(!validate.isEmpty()){
+            ConstraintViolation<CreateUserRequest> erro = validate.stream().findAny().get();
+            String erroMessage = erro.getMessage();
+            return Response.status(400).entity(erroMessage).build();
+        }
+
         User user = new User();
         user.setName(userRequest.getName());
         user.setAge(userRequest.getAge());
