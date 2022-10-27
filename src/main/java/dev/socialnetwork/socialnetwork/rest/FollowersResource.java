@@ -32,7 +32,12 @@ public class FollowersResource {
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
         var follower = userRepository.findById(request.getFollowerId());
+
+        if(userId.equals(follower.getId())){
+            return Response.status(Response.Status.CONFLICT).entity("Nao é possivel seguir a si mesmo").build();
+        }
 
         boolean follows = followerRepository.follower(follower, user);
 
