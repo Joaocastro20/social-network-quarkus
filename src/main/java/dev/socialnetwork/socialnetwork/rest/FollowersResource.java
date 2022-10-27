@@ -1,14 +1,20 @@
 package dev.socialnetwork.socialnetwork.rest;
 
 import dev.socialnetwork.socialnetwork.domain.model.Followers;
+import dev.socialnetwork.socialnetwork.domain.model.User;
 import dev.socialnetwork.socialnetwork.domain.repository.FollowerRepository;
 import dev.socialnetwork.socialnetwork.domain.repository.UserRepository;
 import dev.socialnetwork.socialnetwork.rest.dto.FollowerRequest;
+import dev.socialnetwork.socialnetwork.rest.dto.FollowersResponse;
+import dev.socialnetwork.socialnetwork.rest.dto.FollowersUserResponse;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/users/{userId}/followers")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -51,5 +57,20 @@ public class FollowersResource {
 
 
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @GET
+    @Transactional
+    public Response findFollowersByUser(@PathParam("userId") Long userId){
+        List<Followers> query = followerRepository.findByUser(userId);
+
+        FollowersUserResponse followersUserResponse = new FollowersUserResponse();
+        followersUserResponse.setFollowersCount(query.size());
+
+        var followersList =
+                query.stream().map(FollowersResponse::new).collect(Collectors.toList());
+        followersUserResponse.setContent(followersList);
+
+        return Response.ok(followersUserResponse).build();
     }
 }
