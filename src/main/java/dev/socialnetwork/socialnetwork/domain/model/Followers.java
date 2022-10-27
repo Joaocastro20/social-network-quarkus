@@ -1,0 +1,21 @@
+package dev.socialnetwork.socialnetwork.domain.model;
+
+import lombok.Data;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "followers")
+@Data
+public class Followers {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "follower_id")
+    private User follower;
+
+}
