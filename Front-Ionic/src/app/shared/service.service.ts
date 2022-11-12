@@ -1,3 +1,4 @@
+import { UserRequest } from './models/UserRequest';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -18,5 +19,9 @@ export class ServiceService {
 
   listUsers(): Observable<User[]>{
     return this.http.get<User[]>(`${this.API}users`);
+  }
+
+  addUser(user: User): Observable<User>{
+    return this.http.post<any>(`${this.API}users`,user);
   }
 }

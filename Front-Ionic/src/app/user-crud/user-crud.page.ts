@@ -1,3 +1,4 @@
+import { UserRequest } from './../shared/models/UserRequest';
 import { User } from './../shared/models/User';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServiceService } from '../shared/service.service';
@@ -17,6 +18,8 @@ export class UserCrudPage implements OnInit {
   name: string;
   age: number;
 
+  user: User;
+
   listUsers: User[];
 
   constructor(private service: ServiceService) {}
@@ -32,7 +35,9 @@ export class UserCrudPage implements OnInit {
   }
 
   confirm() {
-    this.modal.dismiss(this.name, 'confirm');
+    this.service.addUser(this.user).subscribe();
+    this.modal.dismiss(null, 'confirm');
+
   }
 
   onWillDismiss($event: Event){
