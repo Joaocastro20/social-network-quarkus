@@ -4,6 +4,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServiceService } from '../shared/service.service';
 import { OverlayEventDetail } from '@ionic/core';
 import { IonModal } from '@ionic/angular';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-crud',
@@ -22,11 +24,29 @@ export class UserCrudPage implements OnInit {
 
   listUsers: User[];
 
-  constructor(private service: ServiceService) {}
+  fb: FormGroup;
+
+  constructor(
+    private service: ServiceService,
+    private formBuilder: FormBuilder,
+    private router: Router
+    ) {}
 
   ngOnInit() {
+    this.fb = this.formBuilder.group({
+      name: [null],
+      age: [null]
+    });
+
     this.service.listUsers().subscribe((list: User[]) => {
       this.listUsers = list;
+    });
+  }
+
+  updateForm(){
+    this.fb.patchValue({
+      name: this.name,
+      age: this.age
     });
   }
 
@@ -35,9 +55,10 @@ export class UserCrudPage implements OnInit {
   }
 
   confirm() {
-    this.service.addUser(this.user).subscribe();
+    this.updateForm();
+    this.service.addUser(this.fb.value).subscribe();
     this.modal.dismiss(null, 'confirm');
-
+    this.router.navigate(['']);
   }
 
   onWillDismiss($event: Event){
