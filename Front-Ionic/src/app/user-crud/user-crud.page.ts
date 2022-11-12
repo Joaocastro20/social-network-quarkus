@@ -1,6 +1,8 @@
 import { User } from './../shared/models/User';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServiceService } from '../shared/service.service';
+import { OverlayEventDetail } from '@ionic/core';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-user-crud',
@@ -8,6 +10,13 @@ import { ServiceService } from '../shared/service.service';
   styleUrls: ['./user-crud.page.scss'],
 })
 export class UserCrudPage implements OnInit {
+
+  @ViewChild(IonModal) modal: IonModal;
+
+  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  name: string;
+  age: number;
+
   listUsers: User[];
 
   constructor(private service: ServiceService) {}
@@ -16,5 +25,20 @@ export class UserCrudPage implements OnInit {
     this.service.listUsers().subscribe((list: User[]) => {
       this.listUsers = list;
     });
+  }
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.name, 'confirm');
+  }
+
+  onWillDismiss($event: Event){
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'confirm') {
+      this.message = `Hello, ${ev.detail.data}!`;
+    }
   }
 }
