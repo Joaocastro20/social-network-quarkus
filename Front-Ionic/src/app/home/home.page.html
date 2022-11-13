@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col class="botoes-home"><ion-button fill="outline" id="open-modal" expand="block">Seguidores</ion-button></ion-col>
       <ion-col class="botoes-home"><ion-button fill="outline" expand="block">Seguindo</ion-button></ion-col>
-      <ion-col class="botoes-home"><ion-button fill="outline" expand="block">Postagens</ion-button></ion-col>
+      <ion-col class="botoes-home"><ion-button fill="outline" id="open-modal-post" expand="block">Novo +</ion-button></ion-col>
     </ion-row>
   </ion-grid>
   <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.90" [breakpoints]="[0, 0.25, 0.5, 0.75]">
@@ -37,10 +37,28 @@
               <h2>{{follower.name}}</h2>
               <p>Sales Rep</p>
             </ion-label>
-            <ion-button (click)="deletFollower(follower.id)" fill="outline" slot="end">Remover</ion-button>
+            <ion-button (click)="deletFollower(follower.id,follower.followerId)" fill="outline" slot="end">Remover</ion-button>
           </ion-item>
         </ion-list>
       </ion-content>
     </ng-template>
   </ion-modal>
+
+  <ion-modal #modal trigger="open-modal-post">
+    <ng-template>
+      <ion-content>
+        <ion-title class="botoes-home">
+          Novo Post
+          <ion-button  fill="outline" (click)="modal.dismiss()">Close</ion-button>
+        </ion-title>
+        <ion-item counter="true">
+          <ion-label position="floating">Default Counter</ion-label>
+          <ion-input maxlength="255" [(ngModel)]="texto"></ion-input>
+        </ion-item>
+        <ion-button  fill="outline" (click)="salvePost()">Salvar</ion-button>
+
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

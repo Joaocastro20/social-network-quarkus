@@ -1,3 +1,4 @@
+import { RequestPost } from './models/RequestPost';
 import { UserRequest } from './models/UserRequest';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -6,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { User } from './models/User';
 import { RequestFollowers } from './models/RequestFollowers';
 import { Follower } from './models/Follower';
+import { Post } from './models/Post';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +35,9 @@ export class ServiceService {
 
   removeFollower(id: number,followerId: number): Observable<any>{
     return this.http.delete<Follower>(`${this.API}users/${id}/followers?followerId=${followerId}`);
+  }
+
+  addPost(id: number,requestPost: RequestPost): Observable<Post>{
+    return this.http.post<Post>(`${this.API}users/${id}/posts`, requestPost);
   }
 }

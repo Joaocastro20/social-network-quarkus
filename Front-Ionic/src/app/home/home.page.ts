@@ -1,3 +1,4 @@
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { RequestFollowers } from '../shared/models/RequestFollowers';
@@ -10,14 +11,22 @@ import { ServiceService } from '../shared/service.service';
 })
 export class HomePage implements OnInit {
 
+  texto: string;
+
+  fbPost: FormGroup;
+
   requestFollowers: RequestFollowers;
 
   constructor(
-    private service: ServiceService
+    private service: ServiceService,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
     this.listFollowers();
+    this.fbPost = this.formBuilder.group({
+      text: [null]
+    });
 
   }
 
@@ -29,10 +38,21 @@ export class HomePage implements OnInit {
     );
   }
 
-  deletFollower(id: number){
-    // this.service.removeFollower(1,13).subscribe();
-    window.alert('em breve ...');
+  deletFollower(id: number,followerId: number){
+    this.service.removeFollower(1,followerId).subscribe();
     this.listFollowers();
+  }
+
+  updateFbPost(){
+    this.fbPost.patchValue({
+      text: this.texto
+    });
+  }
+
+
+  salvePost(){
+    this.updateFbPost();
+    this.service.addPost(1,this.fbPost.value).subscribe();
   }
 
 }
