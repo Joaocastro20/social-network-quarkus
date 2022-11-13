@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  API:'http://localhost:8080/'
+  API:'http://localhost:8080/',
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  ID: 1
 };
 
 /*

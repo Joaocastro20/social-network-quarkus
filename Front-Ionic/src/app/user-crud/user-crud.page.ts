@@ -58,7 +58,7 @@ export class UserCrudPage implements OnInit {
     this.updateForm();
     this.service.addUser(this.fb.value).subscribe();
     this.modal.dismiss(null, 'confirm');
-    this.router.navigate(['']);
+    this.router.navigate(['/']);
   }
 
   onWillDismiss($event: Event){
