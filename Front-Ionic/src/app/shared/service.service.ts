@@ -1,9 +1,11 @@
 import { UserRequest } from './models/UserRequest';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './models/User';
+import { RequestFollowers } from './models/RequestFollowers';
+import { Follower } from './models/Follower';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +25,13 @@ export class ServiceService {
 
   addUser(user: User): Observable<User>{
     return this.http.post<any>(`${this.API}users`,user);
+  }
+
+  listFollowers(id: number): Observable<RequestFollowers>{
+    return this.http.get<RequestFollowers>(`${this.API}users/${id}/followers`);
+  }
+
+  removeFollower(id: number,followerId: number): Observable<any>{
+    return this.http.delete<Follower>(`${this.API}users/${id}/followers?followerId=${followerId}`);
   }
 }
