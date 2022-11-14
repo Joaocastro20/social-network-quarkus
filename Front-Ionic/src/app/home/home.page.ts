@@ -1,8 +1,10 @@
+import { FollowerAddRequest } from './../shared/models/FollowerAddRequest';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { RequestFollowers } from '../shared/models/RequestFollowers';
 import { ServiceService } from '../shared/service.service';
+import { User } from '../shared/models/User';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +14,8 @@ import { ServiceService } from '../shared/service.service';
 export class HomePage implements OnInit {
 
   texto: string;
+
+  listaUsers: User[];
 
   fbPost: FormGroup;
 
@@ -27,7 +31,11 @@ export class HomePage implements OnInit {
     this.fbPost = this.formBuilder.group({
       text: [null]
     });
-
+    this.service.listUsers().subscribe(
+      dados => {
+        this.listaUsers = dados;
+      }
+    );
   }
 
   listFollowers(){
@@ -55,4 +63,8 @@ export class HomePage implements OnInit {
     this.service.addPost(1,this.fbPost.value).subscribe();
   }
 
+  onSeguir(followerId: number){
+    window.alert(followerId);
+  }
 }
+

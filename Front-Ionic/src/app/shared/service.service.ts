@@ -8,6 +8,7 @@ import { User } from './models/User';
 import { RequestFollowers } from './models/RequestFollowers';
 import { Follower } from './models/Follower';
 import { Post } from './models/Post';
+import { FollowerAddRequest } from './models/FollowerAddRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,9 @@ export class ServiceService {
 
   addPost(id: number,requestPost: RequestPost): Observable<Post>{
     return this.http.post<Post>(`${this.API}users/${id}/posts`, requestPost);
+  }
+
+  addFollower(id: number, followerId: FollowerAddRequest){
+    return this.http.put(`${this.API}users/${id}/followers`, followerId);
   }
 }
