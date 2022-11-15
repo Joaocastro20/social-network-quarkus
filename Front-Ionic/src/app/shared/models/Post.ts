@@ -1,4 +1,4 @@
-export interface Post{
+export class Post{
   date: string;
   text: string;
 }

@@ -1,6 +1,6 @@
 import { RequestPost } from './models/RequestPost';
 import { UserRequest } from './models/UserRequest';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -44,5 +44,10 @@ export class ServiceService {
 
   addFollower(id: number, followerId: FollowerAddRequest){
     return this.http.put(`${this.API}users/${id}/followers`, followerId).pipe();
+  }
+
+  listPosts(id: number, followerId: number): Observable<any>{
+    const header = new HttpHeaders().append('followerId',followerId.toString());
+    return this.http.get<Post[]>(`${this.API}users/${id}/posts`, {headers: header});
   }
 }
