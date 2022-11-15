@@ -30,17 +30,20 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.listFollowers();
-    this.listUsers();
+    this.listarUsers();
     this.fbPost = this.formBuilder.group({
      text: [null]
     });
 
   }
 
-  listUsers(){
+  listarUsers(){
     this.service.listUsers().subscribe(
       dados => {
         this.listaUsers = dados.filter(dado=> dado.id !== 1);
+        for(const item of this.requestFollowers.content){
+          this.listaUsers = this.listaUsers.filter(dado=> dado.id !== item.followerId);
+        }
       }
     );
   }
@@ -80,6 +83,7 @@ export class HomePage implements OnInit {
     this.service.addFollower(1,follower).subscribe(
       data=>{
         this.ngOnInit();
+        this.listarUsers();
       }
     );
   }
