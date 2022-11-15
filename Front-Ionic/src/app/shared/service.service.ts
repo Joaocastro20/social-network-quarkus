@@ -43,6 +43,6 @@ export class ServiceService {
   }
 
   addFollower(id: number, followerId: FollowerAddRequest){
-    return this.http.put(`${this.API}users/${id}/followers`, followerId);
+    return this.http.put(`${this.API}users/${id}/followers`, followerId).pipe();
   }
 }

@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestFollowers } from '../shared/models/RequestFollowers';
 import { ServiceService } from '../shared/service.service';
 import { User } from '../shared/models/User';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -23,17 +24,23 @@ export class HomePage implements OnInit {
 
   constructor(
     private service: ServiceService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.listFollowers();
+    this.listUsers();
     this.fbPost = this.formBuilder.group({
-      text: [null]
+     text: [null]
     });
+
+  }
+
+  listUsers(){
     this.service.listUsers().subscribe(
       dados => {
-        this.listaUsers = dados;
+        this.listaUsers = dados.filter(dado=> dado.id !== 1);
       }
     );
   }
@@ -47,7 +54,11 @@ export class HomePage implements OnInit {
   }
 
   deletFollower(id: number,followerId: number){
-    this.service.removeFollower(1,followerId).subscribe();
+    this.service.removeFollower(1,followerId).subscribe(
+      data=>{
+        this.ngOnInit();
+      }
+    );
     this.listFollowers();
   }
 
@@ -64,7 +75,13 @@ export class HomePage implements OnInit {
   }
 
   onSeguir(followerId: number){
-    window.alert(followerId);
+    const follower = new FollowerAddRequest();
+    follower.followerId = followerId;
+    this.service.addFollower(1,follower).subscribe(
+      data=>{
+        this.ngOnInit();
+      }
+    );
   }
 }
 

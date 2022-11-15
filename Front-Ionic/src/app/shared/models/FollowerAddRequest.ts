@@ -1,3 +1,3 @@
-export interface FollowerAddRequest{
+export class FollowerAddRequest{
   followerId: number;
 }
